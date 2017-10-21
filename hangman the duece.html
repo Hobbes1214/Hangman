@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hangman</title>
+</head>
+
+<!-- CSS Styles (These styles are provided to you. Don't touch these!) -->
+<style>
+  body {
+    background: url(http://www.flashbynight.com/tutes/hangmanhtml5/man.png) no-repeat;
+  }
+
+  .letter {
+    width: 30px;
+    height: 30px;
+    border-style: solid;
+    padding: 2px;
+    float: left;
+    margin: 2px;
+  }
+
+  .letter-button-color {
+    color: darkcyan;
+  }
+
+  .letterguess-color {
+    color: orange;
+  }
+
+  #display {
+    margin-top: 78px;
+    height: 500px;
+    width: 220px;
+    margin-left: 60px;
+  }
+
+  #buttons {
+    padding-top: 60px;
+  }
+
+  #clear {
+    margin-left: 20px;
+    font-size: 25px;
+    color: black;
+    border-style: solid;
+    width: 100px;
+  }
+
+  #guessedletters {
+  padding-top: 0px;
+  margin-left: : 0px;
+  }
+
+  }
+</style>
+
+<body>
+  <div id="display"></div>
+  
+  <div id="buttons"></div>
+  <button id="clear">clear</button>
+  <div id="guessedletters">Guessed Letters</div>
+  <div id= "activeword"> </div>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+      // letter array
+      var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"];
+
+      // word bank array
+      var wordBank = [
+        "katakana",
+        "hike",
+        "barbette",
+        "hindrance",
+        "nape",
+        "racemize",
+        "slaphappy",
+        "bulgy",
+        "spirantize",
+        "canciones",
+        "rusk",
+        "outdeiling",
+        "catabasis",
+        "lapper",
+        "scituate",
+        "seal",
+        "cycle",
+        "sheenie",
+        "bashfully",
+        "chiaus",
+      ]
+
+      var guessedletters = []
+
+      var word = targetword()
+      console.log(word)
+
+      var displaystring = underscores()
+      console.log(displaystring)
+
+      displayupdate()
+
+
+
+      // creating the letter buttons
+
+        for (var i=0; i<letters.length; i++) {
+
+        var button = $('<button>');
+        button.addClass('letter-button letter letter-button-color');
+        button.text(letters[i]);
+        button.attr("data-let", letters[i]);
+        $("#buttons").append(button);
+        }
+
+       $('.letter-button').on("click", function(event) {
+        
+        /*
+          1. check if its been clicked before 
+            - if it has -> return (ignore)
+            - if not then add to guessed letters
+
+          2. does word include letter
+            - yes: handle correct guess
+            - no: handle incorrect guess
+
+          3. check if game is over
+            - did user complete the word
+            - does the user have guesses remaining
+
+
+        */
+
+        var letter = event.target.dataset.let
+        console.log(letter)
+
+        if (guessedletters.includes(letter)) {
+          return;
+
+        }
+
+        guessedletters.push(letter)
+
+        // We can safely assume the letter has not been guessed at this point
+        // Now we need to check to see if the letter is actually part of the word. Spell check.
+
+        if ( word.includes( letter.toLowerCase() ) ) {
+          console.log(letter, "correct guess")
+        
+        
+
+
+
+        } else {
+          console.log("nope")
+        }
+
+        // if (game over) {
+        //   handle game over
+        // }
+
+      });
+
+      var letterguess = $("<div>");
+
+      letterguess.addClass("letterguess-color");
+
+      letterguess.text($(this).attr("data-letter"));
+
+
+
+      // I need an if else here to determine whether to append to the gueessed letter box, or the word box
+
+
+      $("#guessedletters").append(letterguess);
+
+      $('#clear').on("click", function () {
+
+      $("#guessedletters").empty();
+
+      });
+
+      // Selecting a random word from the word bank
+
+      function targetword () {
+        return wordBank[Math.floor(Math.random() * wordBank.length)]
+      } 
+
+      // 1. create an empty string
+      // 2  build, a loop based on the word length
+      // 3. each time we loop, add an underscore to the string
+      // 4. return string
+
+      // done: a string with underscores for each letter in word
+
+      function underscores (letter) {
+
+        var underscoreString = ''
+        for (var i=0; i<word.length; i++) {
+
+          if (letter && letter === word[i]) { 
+          underscoreString += letter
+          
+        }   
+
+          else { underscoreString += " _"}
+
+        }
+
+      return underscoreString  
+
+      }  
+        
+      function displayupdate() {
+        $("#display").text(displaystring)
+      }
+
+
+      // function name() {}
+
+    });
+  </script>
+</body>
+
+</html>
